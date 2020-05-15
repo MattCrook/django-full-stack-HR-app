@@ -1,0 +1,18 @@
+ {% extends 'shared/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+    <section id="training-program-attendee-details">
+        <ol>
+    {% for attendee in attendees %}
+
+        <li class="e_name">{{ attendee.first_name }} {{ attendee.last_name}}</li>
+    {% endfor %}
+        </ol>
+
+    <div class="no_list"></div>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+    <h1 class="text-center">Add Employee </h1>
+    {% if employee.id is not None %}
+    <form action="{% url 'hrapp:employee' employee.id%}" method="POST" class="new_form">
+    {% else %}
+    <form action="{% url 'hrapp:employee_list'%}" method="POST" class="new_form">
+    {% endif %}
+        {% csrf_token %}
+
+        {% if employee.id is None %}
+            <fieldset class="new_form">
+                <label class="new_form">First Name</label>
+                <input type="text" name="first_name" value="{{employee.first_name}}" class="new_form"/>
+            </fieldset>
+        {% endif %}
+
+        <fieldset class="new_form">
+            <label class="new_form">Last Name</label>
+            <input class="new_form"type="text" name="last_name" value="{{ employee.last_name }}"/>
+        </fieldset>
+        
+        {% if employee.id is None %}
+        <input type="hidden" name="is_supervisor" value="False">
+            <fieldset class="new_form">
+                <label class="new_form">Start Date</label>
+                <input type="date" name="start_date" value="{{ employee.start_date }}" class="new_form"/>
+            </fieldset>
+        {% endif %}
+        <fieldset class="new_form">
+            <label class="new_form">Department</label>
+
+            <select id="departments" name="department"class="new_form">
+                {% for department in departments %}
+                    <option class="new_form" {% if department.id == employee.department_id %}selected{% endif %} value="{{department.id}}">{{ department}}</option>
+                {% endfor %}
+            </select>
+
+        </fieldset>
+        {% if employee.id is not None %}
+            <fieldset class="new_form">
+                <label class="new_form">Computer</label>
+
+                <select id="computer" name="computer" class="new_form">
+                    <option value="" class="new_form">No Assigned Computer</option>
+                    {% for computer in computers %}
+                        <option class="new_form"{% if computer.id == computer_owned.computer.id %}selected{% endif %} value="{{computer.id}}">{{ computer}}</option>
+                    {% endfor %}
+                </select>
+
+            </fieldset>
+            <input type="hidden" name="computer_owned" value={{computer_owned.computer.id}}>
+            <input type="hidden" name="computer_relationship" value={{computer_owned.id}}>
+        {% endif %}
+            
+
+        {% if employee.id %}
+            <input type="hidden" name="actual_method" value="PUT">
+            <input class="new_form" type="submit" value="Edit Employee"/>
+        {% else %}
+            <input class="new_form" type="submit" value="Add Employee"/>
+        {% endif %}
+
+    </form>
+{% endblock content %}

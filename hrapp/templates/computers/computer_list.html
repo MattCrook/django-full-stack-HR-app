@@ -1,0 +1,47 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class='header'>
+<h1>Computers</h1>
+{% if request.user.is_authenticated %}
+</div>
+<a class="add_computer_btn" href="{% url 'hrapp:computer_form'  %}">Add Computer</a>
+<div class="list-container">
+<div class="search-container">
+<form action="{% url 'hrapp:computers' %}" method="POST">
+{% csrf_token %}
+<input type="hidden" name="actual_method" value="SEARCH" />
+<input type="text" name="search_results" id="search"  placeholder="Search by manufacturer or make"/>
+<input type="submit" value="Search" />
+</form>
+</div>
+<div class="list-container">
+{%if length != 0%}
+<ol>
+{% for computer in computers %}
+    <li>
+        <p><a href="{% url 'hrapp:computer' computer.id %}">{{ computer }}</a></p>
+     
+
+    </li>
+{% endfor %}
+</ol>
+{%else%}
+<h3>We're sorry, we couldn't find any computers. <br>Either add a new computer or search for a different one</h3>
+{%endif%}
+
+{% else %}
+</div>
+<div class="list-container">
+<ol>
+{% for computer in computers %}
+    <li>
+        <p>{{ computer }}</p>
+    </li>
+{% endfor %}
+</ol>
+<div class="list-container">
+{% endif %}
+{% endblock content %}
+
+{% comment %} {% url 'hrapp:computer' computer.id %} {% endcomment %}

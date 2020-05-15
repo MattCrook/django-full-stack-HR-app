@@ -1,0 +1,55 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<body>
+
+    <section id="training-program-details">
+        <h1>{{ training_program.title }}</h1>
+        <div>Capacity: {{ training_program.capacity}}</div>
+        <div>Start Date: {{ training_program.start_date }}</div>
+        <div>End Date: {{ training_program.end_date }}</div>
+
+        {% if training_program.employee.id is not null %}
+        <div>Number Of Employees Currently Assigned: {{ get_count }}</div>
+        {% else %}
+        <div>Attendees: No one currently signed up for this training program. </div>
+        {% endif %}
+    </section>
+
+    <section id="training_program_actions" style="display:flex;">
+        {% if start_date_program > current_date %}
+        <form action="{% url 'hrapp:training_program' training_program.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="actual_method" value="DELETE">
+            <button>Delete</button>
+        </form>
+        <form action="{% url 'hrapp:training_program_edit_form' training_program.id %}" method="GET">
+            {% csrf_token %}
+            <button>Edit</button>
+        </form>
+        <section class="list_of_employees">
+            <button>
+                <a href="{% url 'hrapp:attendees' training_program.id %}">See List Of Employees Signed Up</a>
+            </button>
+        </section>
+    </section>
+        {% else %}
+        <form>
+            {% csrf_token %}
+            <input type="hidden" name="actual_method" value="DELETE">
+            <button>Cannot Be Deleted(See Start Date)</button>
+        </form>
+     <section class="list_of_employees">
+            <button>
+                <a href="{% url 'hrapp:attendees' training_program.id %}">See List Of Employees That Attended</a>
+            </button>
+        </section>
+    </section>
+    {% endif %}
+
+</body>
+
+{% endblock %}

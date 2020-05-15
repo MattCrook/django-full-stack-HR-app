@@ -1,0 +1,16 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{%block content%}
+<div class='header'>
+<h1>Are you sure you want to delete computer #{{computer_id}}?</h1>
+</div>
+<div class="confirm-container">
+<form action="{% url 'hrapp:computer' computer_id%}" method = 'POST'>
+ {% csrf_token %}
+<input type='hidden' name="actual_method" value="DELETE" />
+<input type='submit' value="Yes" />
+<a href="{% url 'hrapp:computer' computer_id%}">Go back</a>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+    <h1>Assign Program </h1>
+
+    {% if programs %}
+    <form action="{% url 'hrapp:employee' employee.id%}" method="POST">
+    
+        {% csrf_token %}
+            <fieldset>
+                <label>Programs</label>
+
+                <select id="program" name="program">
+                    <option value="">No Assigned Program</option>
+                    {% for program in programs %}
+                        <option value="{{program.id}}">{{ program.title }}</option>
+                        
+                    {% endfor %}
+                </select>
+
+            </fieldset>
+
+        <input type="hidden" name="actual_method" value="AssignProgram">  
+        <input type="submit" value="Assign"/>
+
+
+    </form>
+            {% else %}
+           <p>No availible programs to assign to Employee. <a href="{% url 'hrapp:training_program_form' %}">Add Training Program</a>.</p>
+                {% endif %}
+{% endblock content %}

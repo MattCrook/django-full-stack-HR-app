@@ -1,0 +1,39 @@
+{% extends 'shared/base.html'%}
+{% load static %}
+{%block content %}
+<div class="header"><h1 class="text-center">New Computer Form</h1></div>
+<div class="computer-form">
+<form action = "{% url 'hrapp:computers' %}" method="POST" class="new_form">
+      {% csrf_token %}
+<fieldset ='comp-set' class="new_form">
+<label for='manufacturer'class="new_form">Manufacturer: </label>
+<input type='text' id="manufacturer" name="manufacturer" class="new_form">
+</fieldset>
+<fieldset ='comp-set' class="new_form"><label for='make'class="new_form">Make: </label>
+<input type='text'class="new_form" id="make" name="make"></fieldset>
+<fieldset ='comp-set'class="new_form">
+    <label for="purchase_date"class="new_form">Purchase Date: </label>
+    <input class="new_form" type="date" id="purchase_date" name="purchase_date">
+</fieldset>
+<fieldset ='comp-set'class="new_form">
+<label for='employee'class="new_form">Employee: </label>
+<select id = "employee" name="employee"class="new_form">
+<option value="Not Assigned" selected class="new_form">Not Assigned</option>
+{% comment %} Loop over employees to populate dropdown {% endcomment %}
+{% for employee in employees %}
+{%if employee.is_supervisor%}
+{% comment %} if there is a supervisor add a star {% endcomment %}
+<option value="{{employee.id}}"class="new_form">*{{employee}} {{employee.id}} </option>
+{%else%}
+<option value = "{{employee.id}}"class="new_form">{{employee}} {{employee.id}}</option>
+{%endif%}
+{% endfor %}
+</select>
+</fieldset>
+<fieldset>
+<input type="submit" value="Add Computer"/>
+</fieldset>
+</form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<h1>Training Programs</h1>
+
+
+{% comment %} Only authenticated users can view this part of the template {% endcomment %}
+{% if request.user.is_authenticated %}
+<button class="add_tp_btn"><a href="{% url 'hrapp:training_program_form' %}">Add Training Program</a></button>
+
+    {% if 'trainingprograms' in request.path %}
+        <h2>Upcoming Programs</h2>
+        <ol class="training_programs">
+            {% for training_program in all_training_programs %}
+            <li class="program">
+            <a class="program__title" href="{% url 'hrapp:training_program' training_program.id %}">{{ training_program.title }}</a>
+            </li>
+            {% endfor %}
+        </ol>
+        <button>
+            <a href="{% url 'hrapp:pasttraining' %}">View Past Programs</a>
+        </button>
+    {% elif 'pasttraining' in request.path %}
+        <h2>Past Training Programs</h2>    
+        <ol class="training_programs">
+            {% for training_program in past_training_programs %}
+            <li class="program">
+            <a class="program__title" href="{% url 'hrapp:training_program' training_program.id %}">{{ training_program.title }}</a>
+            </li>
+            {% endfor %}
+        </ol>
+        <button>
+            <a href="{% url 'hrapp:trainingprograms' %}">View Future Programs</a>
+        </button>
+    {% endif %}
+{% else %}
+    {% if 'trainingprograms' in request.path %}
+    <ol class="training_programs">
+    {% for training_program in all_training_programs %}
+    <li class="program">
+            {{ training_program.title }}
+    </li>
+    {% endfor %}
+    </ol>
+    <button>
+            <a href="{% url 'hrapp:pasttraining' %}">View Past Programs</a>
+    </button>
+    {% elif 'pasttraining' in request.path %}
+    <ol class="training_programs">
+    {% for training_program in past_training_programs %}
+        <li class="program">
+                {{ training_program.title }}
+    {% endfor %}
+    </ol>
+    <button>
+        <a href="{% url 'hrapp:trainingprograms' %}">View Future Programs</a>
+    </button>
+    {% endif %}
+{% endif %}
+
+
+{% endblock %} 

@@ -1,0 +1,26 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+    <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+
+    <p>Department: {{ employee.department.department_name}}</p>
+    <a href={% url "hrapp:employee_program_form" employee.id%}>Assign to Training Program</a>
+    <p>Training Programs: 
+
+        <ul>
+            {% for program in employee_programs %}
+                <li>{{program.title}}</li>
+                {% empty %}
+                    No Programs
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>Assigned Computer: {{ employee_computers.computer }} {% if not employee_computers %}No Computer{% endif %}</p>
+
+    <form action="{% url "hrapp:employee_edit" employee.id%}">
+        {% csrf_token %}
+        <input type="submit" value="Edit Employee">
+    </form>
+    
+{% endblock content %}
